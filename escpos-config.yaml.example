@@ -1,0 +1,20 @@
+# From https://github.com/python-escpos/python-escpos/blob/11d46fdb66d612067e17cc2c8c66c103dd4781ad/doc/user/usage.rst#the-printer-section
+
+printer:
+        type: File
+        devfile: /dev/someprinter
+        profile: TM-U220
+
+printer:
+        type: Network
+        host: 127.0.0.1
+        port: 9000
+        profile: TM-U220
+
+printer:
+        type: Usb
+        idVendor: 0x1234
+        idProduct: 0x5678
+        in_ep: 0x66
+        out_ep: 0x01
+        profile: TM-U220

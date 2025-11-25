@@ -1,0 +1,16 @@
+[project]
+name = "thermtypst"
+version = "0.1.0"
+description = "Library for printing typst documents on thermal printers"
+readme = "README.md"
+authors = [{ name = "Krzysztof Mazur", email = "git@krzmaz.com" }]
+requires-python = ">=3.14"
+dependencies = ["python-escpos>=3.1", "typst>=0.14.2"]
+
+[build-system]
+requires = ["uv_build>=0.9.11,<0.10.0"]
+build-backend = "uv_build"
+
+# using the latest git version, since the latest release doesn't support my printer
+[tool.uv.sources]
+python-escpos = { git = "https://github.com/python-escpos/python-escpos" }
