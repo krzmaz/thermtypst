@@ -14,21 +14,31 @@
   )
 }
 
-#let note(note_data) = {
+#let note_content(note_data) = {
   let rotation = if note_data.flip {
     180deg
   } else {
     0deg
   }
-  page(width: 80mm, height: auto, margin: (x: 4mm, top: 4mm, bottom: 6mm), rotate(rotation, [
-    #set text(20pt, hyphenate: true)
-    #set par(leading: 0.4em)
-    #align(center, [
+  rotate(
+    rotation,
+    [
       #note_data.text
       #if note_data.date.len() > 0 [
         #due_date(note_data)
       ]
-    ])
-  ]))
+
+    ],
+  )
 }
+
+#let note(note_data) = {
+  page(width: 80mm, height: auto, margin: (x: 4mm, top: 4mm, bottom: 6mm), [
+    #set text(20pt, hyphenate: true)
+    #set par(leading: 0.4em)
+    #set align(center)
+    #note_content(note_data)
+  ])
+}
+
 
