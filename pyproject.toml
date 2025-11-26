@@ -1,6 +1,6 @@
 [project]
 name = "thermtypst"
-version = "0.1.1"
+version = "0.2.0"
 description = "Library for printing typst documents on thermal printers"
 readme = "README.md"
 authors = [{ name = "Krzysztof Mazur", email = "git@krzmaz.com" }]

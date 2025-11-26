@@ -1,11 +1,12 @@
-from collections.abc import Callable
-from io import BytesIO
 import json
+from io import BytesIO
 from pathlib import Path
-from escpos.config import Config
-from escpos.capabilities import Profile, get_profile
 import typst
+from escpos.capabilities import Profile, get_profile
+from escpos.config import Config
+from escpos.escpos import Escpos
 
+from thermtypst import logger
 from thermtypst.note import Note
 
 
@@ -28,10 +29,29 @@ class PrinterManager:
         if profile_override:
             config._printer_config["profile"] = profile_override
 
-        self.printer = config.printer()
+        self.printer: Escpos = config.printer()
+        logger.debug("PrinterManager init complete")
 
-    def print_typst_note(self, note: Note, template: Path):
-        self._print_image(self._render_note(note, template))
+    def print_typst_note(self, note: Note, template: Path) -> bool:
+        try:
+            online = self.printer.is_online()
+            if online:
+                logger.debug(f"printer connected, printing now: {note}")
+                self._print_image(self._render_note(note, template))
+                return True
+            else:
+                raise Exception("disconnected")
+        except Exception:
+            logger.warning("printer disconnected, trying to reconnect")
+            self.printer.close()
+            self.printer.open()
+            if self.printer.is_online():
+                logger.info(f"Reconnection successful, printing now: {note}")
+                self._print_image(self._render_note(note, template))
+                return True
+            else:
+                logger.warning("Reconnection failed, aborting")
+                return False
 
     def _print_image(self, image_data: bytes):
         self.printer.image(BytesIO(image_data))
